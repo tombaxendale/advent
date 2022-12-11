@@ -2,38 +2,41 @@ from collections import defaultdict
 
 f = open('5/crate_order.txt', 'r')
 input = f.read()
-crates = input.split("\n\n")[0] # split text input into crates and instructions
-crates = crates.split("\n")
+
+# split text input into crates and instructions
+crates_raw = input.split("\n\n")[0]
+crates_raw = crates_raw.split("\n")
+crates_final = []
 
 commands = input.split("\n\n")[1]
 commands = commands.split("\n")
 
+# create new dictionary with list as default value
+# new keys' values can be instantly appended as a list
 crate_dict = defaultdict(list)
 
-def remove_nth_char(row, n):
+def remove_nth_char(string, n):
 
-    row = list(row)
-    del row[n-1::n]
-    row = "".join(row)
-    return row
+    string = list(string)
+    del string[n-1::n]
+    string = "".join(string)
+    return string
 
-crates_new = []
-
-for row in crates:
+for row in crates_raw:
     if '1' in row: # skip final row with crate stack numbers
         break
     else:
         row = remove_nth_char(row, 4)
-        row = row.replace("   ","[ ]") # count empty crates
+        row = row.replace("   ","[ ]") # log empty crates
         row = row.replace("[","").replace("]","") # remove square brackets
-        crates_new.append(list(row))
+        crates_final.append(list(row))
 
-for row in crates_new: # iterate through each row of crates and add to the corresponding crate pile (1, 2, 3...)
+for row in crates_final: # iterate through each row of crates and add to the corresponding crate pile (1, 2, 3...)
     i = 1
     for crate in row:
         if crate != " ":
-            crate_dict[i].append(crate)
-        i = i+1
+            crate_dict[i].append(crate) # instantly append because of list defaultdict
+        i += 1
 
 # sort dict by key values
 crate_dict = dict(sorted(crate_dict.items()))
@@ -46,9 +49,6 @@ def move_crate(command):
     crate_dict[_to].insert(0, crate) # add to beginning (top) of _to crate stack
     del crate_dict[_from][0] # delete from _from crate stack
 
-    #print("from", crate_dict[_from])
-    #print("to ", crate_dict[_to])
-
 def move_crates(command):
     _move = int(command.split(" ")[1])
     for i in range(0, _move):
@@ -57,4 +57,5 @@ def move_crates(command):
 for command in commands:
     move_crates(command = command)
 
-print(crate_dict)
+answer_5a = [value[0] for key, value in crate_dict.items()]
+print(answer_5a)

@@ -14,7 +14,6 @@ commands = commands.split("\n")
 # create new dictionary with list as default value for new keys. enables instant list appending to new keys
 crate_dict = defaultdict(list)
 
-
 # process the text input: remove every fourth character in each row, leaving behind only crates or crate spaces
 def remove_nth_char(string, n):
 
@@ -60,6 +59,8 @@ def move_crates(command):
 
 #answer_5a = [value[0] for key, value in crate_dict.items()]
 #print(answer_5a)
+
+## begin answer 5b ##
 
 # create a block of crates, remove from original stack and add to new stack in reverse order
 def move_crate_block(command):

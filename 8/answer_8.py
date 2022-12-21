@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-f = open('8/input_sample.txt', 'r')
+f = open('8/input.txt', 'r')
 forest = f.read()
 forest = forest.split("\n")
 
@@ -36,23 +36,27 @@ forest_transposed = [list(treeline) for treeline in zip(*forest)]
 forest_transposed_depth = len(forest_transposed) 
 forest_transposed_width = len(forest_transposed[0]) # forest is rectangular
 
-i = 1
+i = 0
 for treeline in forest_transposed:
-    j = 0 # tree number in row. skip 0 because it's already marked as edge
+    j = 0 # tree number in row
     for tree in treeline:
         if i ==0 \
             or i == forest_transposed_depth - 1\
             or j == 0 \
             or j == forest_transposed_width - 1:
+            j += 1
             continue
 
-        print(treeline)
+        #print(treeline)
         tree_height_left = max(treeline[0:j])
         tree_height_right = max(treeline[j+1:forest_transposed_width])
 
         if tree_height_left < tree or tree_height_right < tree:
             print ('assigning', i, j, tree, 'value of x')
-            forest_vis[j][i] = 'x'
+            try:
+                forest_vis[j][i] = 'x'
+            except Exception as e:
+                print(j, i, e)
             j += 1
             continue
         j += 1
@@ -65,5 +69,6 @@ for treeline in forest_vis:
         if tree == 'x':
             vis_count += 1
 
-print(forest_vis)
+for treeline in forest_vis:
+    print(treeline,'\n')
 print(vis_count)
